@@ -1007,3 +1007,34 @@
 2017-03-17 14:00:15,740, DEBUG: Starting new HTTP connection (1): www.thesaurus.com
 2017-03-17 14:00:15,752, DEBUG: http://www.thesaurus.com:80 "GET /browse/framework HTTP/1.1" 200 21918
 2017-03-17 14:00:15,829, INFO: 127.0.0.1 - - [17/Mar/2017 14:00:15] "POST /answerCheck HTTP/1.1" 200 -
+2017-03-17 15:13:18,675, INFO:  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2017-03-17 15:13:18,681, INFO:  * Restarting with stat
+2017-03-17 15:13:37,317, WARNING:  * Debugger is active!
+2017-03-17 15:13:37,442, INFO:  * Debugger PIN: 153-246-620
+2017-03-17 15:13:54,512, DEBUG: Starting new HTTP connection (1): localhost
+2017-03-17 15:13:55,207, INFO: 127.0.0.1 - - [17/Mar/2017 15:13:55] "POST /pipelineFilter HTTP/1.1" 200 -
+2017-03-17 15:13:55,208, DEBUG: http://localhost:5000 "POST /pipelineFilter HTTP/1.1" 200 210
+2017-03-17 15:13:55,347, DEBUG: Starting new HTTP connection (1): localhost
+2017-03-17 15:13:55,721, INFO: 127.0.0.1 - - [17/Mar/2017 15:13:55] "POST /pipelineFilter HTTP/1.1" 200 -
+2017-03-17 15:13:55,721, DEBUG: http://localhost:5000 "POST /pipelineFilter HTTP/1.1" 200 236
+2017-03-17 15:13:56,117, DEBUG: Starting new HTTP connection (1): www.thesaurus.com
+2017-03-17 15:13:56,134, DEBUG: http://www.thesaurus.com:80 "GET /browse/framework HTTP/1.1" 200 21909
+2017-03-17 15:13:56,232, INFO: 127.0.0.1 - - [17/Mar/2017 15:13:56] "POST /answerCheck HTTP/1.1" 200 -
+2017-03-17 15:14:05,009, DEBUG: Starting new HTTP connection (1): localhost
+2017-03-17 15:14:05,379, INFO: 127.0.0.1 - - [17/Mar/2017 15:14:05] "POST /pipelineFilter HTTP/1.1" 200 -
+2017-03-17 15:14:05,380, DEBUG: http://localhost:5000 "POST /pipelineFilter HTTP/1.1" 200 210
+2017-03-17 15:14:05,383, DEBUG: Starting new HTTP connection (1): localhost
+2017-03-17 15:14:05,883, INFO: 127.0.0.1 - - [17/Mar/2017 15:14:05] "POST /pipelineFilter HTTP/1.1" 200 -
+2017-03-17 15:14:05,887, DEBUG: http://localhost:5000 "POST /pipelineFilter HTTP/1.1" 200 236
+2017-03-17 15:14:05,893, DEBUG: Starting new HTTP connection (1): www.thesaurus.com
+2017-03-17 15:14:05,906, DEBUG: http://www.thesaurus.com:80 "GET /browse/framework HTTP/1.1" 200 21909
+2017-03-17 15:14:05,977, INFO: 127.0.0.1 - - [17/Mar/2017 15:14:05] "POST /answerCheck HTTP/1.1" 200 -
+2017-03-17 15:14:15,286, DEBUG: Starting new HTTP connection (1): localhost
+2017-03-17 15:14:15,660, INFO: 127.0.0.1 - - [17/Mar/2017 15:14:15] "POST /pipelineFilter HTTP/1.1" 200 -
+2017-03-17 15:14:15,661, DEBUG: http://localhost:5000 "POST /pipelineFilter HTTP/1.1" 200 210
+2017-03-17 15:14:15,665, DEBUG: Starting new HTTP connection (1): localhost
+2017-03-17 15:14:16,036, INFO: 127.0.0.1 - - [17/Mar/2017 15:14:16] "POST /pipelineFilter HTTP/1.1" 200 -
+2017-03-17 15:14:16,037, DEBUG: http://localhost:5000 "POST /pipelineFilter HTTP/1.1" 200 236
+2017-03-17 15:14:16,042, DEBUG: Starting new HTTP connection (1): www.thesaurus.com
+2017-03-17 15:14:16,055, DEBUG: http://www.thesaurus.com:80 "GET /browse/framework HTTP/1.1" 200 21909
+2017-03-17 15:14:16,192, INFO: 127.0.0.1 - - [17/Mar/2017 15:14:16] "POST /answerCheck HTTP/1.1" 200 -

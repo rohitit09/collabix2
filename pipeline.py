@@ -1,5 +1,6 @@
 import nltk
 from spacy.en import English
+# import inflection
 from textblob import TextBlob
 from flask import Flask, jsonify
 import re
@@ -29,7 +30,7 @@ def nltkExtractor(query, callback=None):
             for tag in tagged:
                 print (tag(0))
                 print (tag(1))
-                if tag[1] == 'NN' or tag[1] == 'NNP' or tag[0].lower() == 'not':
+                if tag[1] == 'NN' or tag[1] == 'NNP':
                     if tag[0].lower() not in nouns_list and tag[0].lower() not in cachedStopWords:
                         if re.match("^[a-zA-Z0-9_]*$", tag[0].lower()[0]):
                             word = tag[0].lower()

@@ -1,1 +1,7 @@
+*.log
+**/*.log
+**/.DS_Store
 *.pyc
+services/.DS_Store
+entity_logs
+logs
