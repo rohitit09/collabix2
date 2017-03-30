@@ -9,7 +9,7 @@ import enchant
 from nltk.corpus import stopwords
 from multiprocessing import Queue
 import threading
-from services.logFile import infoLog, errorLog
+#from services.logFile import infoLog, errorLog
 
 parser = English()
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def nltkExtractor(query, callback=None):
             for tag in tagged:
                 print (tag(0))
                 print (tag(1))
-                if tag[1] == 'NN' or tag[1] == 'NNP':
+                if tag[1] == 'NN' or tag[1] == 'NNP' or tag[1] == 'VB' or tag[1] == 'VBP' or tag[1] == 'VBD' or tag[1] == 'VBG' or tag[1] == 'VBN' or tag[1] == 'VBZ':
                     if tag[0].lower() not in nouns_list and tag[0].lower() not in cachedStopWords:
                         if re.match("^[a-zA-Z0-9_]*$", tag[0].lower()[0]):
                             word = tag[0].lower()
@@ -39,7 +39,7 @@ def nltkExtractor(query, callback=None):
                             nouns_list.append(word)
         if callback is None:
             gc.collect()
-            infoLog("nltkExtractor == %s" %nouns_list)
+            #infoLog("nltkExtractor == %s" %nouns_list)
             return jsonify({"entities": nouns_list})
         gc.collect()
         callback.put( { "entities" : nouns_list, "function": "nltkExtractor"  } )
@@ -93,7 +93,7 @@ def textBlobExtractor(query, callback=None):
 
         if callback is None:
             gc.collect()
-            infoLog("textBlobExtractor == %s" %nouns_list)
+            #infoLog("textBlobExtractor == %s" %nouns_list)
             return jsonify({"entities": nouns_list})
         gc.collect()
         callback.put( { "entities" : nouns_list, "function": "textBlobExtractor"  } )
@@ -130,18 +130,18 @@ def spacyExtractor(query,callback=None):
                 print ("token-",str(token))
                 print ("pos",token.pos_)
                 new.append({"token.pos_": token.pos_, "token": str(token)})
-                if token.pos_ == 'PROPN' or token.pos_ == 'NOUN':
+                if token.pos_ == 'PROPN' or token.pos_ == 'NOUN' or token.pos_ == 'VERB':
                     token = str(token)
                     if token not in entities_list:
                         entities_list.append((str(token)).lower())
         if callback is None:
             gc.collect()
-            infoLog("spacyExtractor == %s" %entities_list)
+            #infoLog("spacyExtractor == %s" %entities_list)
             return jsonify({"entities": entities_list, "location": location, "organisation": organisation, "person": person, "date": date})
         gc.collect()
         callback.put( { "entities" : entities_list, "function": "spacyExtractor" , "location": location, "organisation": organisation, "person": person, "date": date   } )
     except Exception as e:
-        errorLog("Error while extracting entities in spacyExtractor from pipline, error --> %s" %str(e))
+        #errorLog("Error while extracting entities in spacyExtractor from pipline, error --> %s" %str(e))
         if callback is None:
             gc.collect()
             return jsonify({"entities": entities_list, "location": location, "organisation": organisation, "person": person, "date": date})

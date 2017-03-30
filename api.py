@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,render_template
 from nltk.corpus import stopwords
 from PyDictionary import PyDictionary
 import spelling
@@ -7,11 +7,13 @@ import pipeline
 import json
 import requests
 import re
+import difflib
 
 dictionary=PyDictionary()
 cachedStopWords = stopwords.words("english")
 cachedStopWords.remove('not')
 app = Flask(__name__)
+ques_mark_word=["how","when","what","where","why"]
 
 def spellingCorrection(text):
   model_answer = " ".join([spelling.correction(item) for item in text['model_answer'].split()])
@@ -39,6 +41,63 @@ def checkEntities(text):
         return {"status": False, "model_answer_entities": model_answer_entities['results'], "answer_entities": answer_entities['results']}
   return {"status": True, "model_answer_entities": model_answer_entities['results'], "answer_entities": answer_entities['results']}
 
+
+
+
+def spellingCorrectionques(text):
+  question = " ".join([spelling.correction(item) for item in text['question'].split()])
+  return {"question": question}
+
+def removeStopWordsques(text):
+  question = re.sub('\W+'," ", text['question'].strip().lower())
+  question = " ".join([item for item in question.split() if item not in cachedStopWords])
+  return {"question": question}
+
+
+def checkedEntities(text,ques_text1):
+  question = text['question']
+  count=[]
+  
+  resulted_entity=[]
+  func_list = ['spacyExtractor', 'nltkExtractor']
+  headers = {'content-type': 'application/json'}
+  url = 'http://localhost:5000/pipelineFilter'
+  entities = json.loads(requests.request("POST", url, data=json.dumps({"texts": [question], "pipeline_list": func_list}), headers=headers).text)
+  ques_text= ques_text1.split(" ")
+  for i in ques_mark_word:
+    if i in ques_text:
+      k=entities['results']
+      k.append(i)
+      entities['results']=k
+  import arangoModule
+  db=arangoModule.db
+  result=list(db.aql.execute("for u in it_ques_ans return u"))
+  for ques in result:
+    count=[]
+    for entity in entities['results']:
+      if entity in ques['ques_entities']:
+        count.append(entity)
+    temp=" ".join(count)
+    score=difflib.SequenceMatcher(None, temp.lower(), ques_text1.lower()).ratio()
+    res={"usr_ques_extarcted_entity":entities['results'],"matched_entity":count,"count":len(count),"ques_key":ques['_key'],"entity_in_ques":ques['ques_entities'],"question":ques['question'],"score":score,"answer":ques['answer']}
+    print res
+    resulted_entity.append(res)
+  resulted_entity = sorted(resulted_entity , key=lambda k: k['count'] , reverse=True )
+  return {"status": True,"result":resulted_entity[0]}
+
+@app.route("/matchquestion",methods=["POST"])
+def matchQuestion():
+  text = request.json
+  print 'text', text
+  text1={"question":text}
+
+  text = removeStopWordsques(text1)
+  text = pipeline.convertSynonyms({"answer":text['question']})
+  #text = spellingCorrectionques({"question":text['answer']})
+  result = checkedEntities({"question":text['answer']},text1['question'])
+  return jsonify(result)
+
+
 @app.route("/answerCheck",methods=["POST"])
 def answerCheck():
   text = request.json
@@ -54,9 +113,24 @@ def pipelineFilter():
   try:
     entity_extractor_functions_list = request.json.get('pipeline_list',None)
     results = pipeline.pipelineFilterWrapperV2(request.json, cachedStopWords, entity_extractor_functions_list)
-    return jsonify(json.loads(results.get_data().decode('utf8')))
+    results=json.loads(results.get_data().decode('utf8'))
+    text=request.json['texts']
+    text1=text[0].split(" ")
+    for i in ques_mark_word:
+      if i in text1:
+        k=results['results']
+        k.append(i)
+        results['results']=k
+    return jsonify(results)
   except Exception as e:
     return jsonify({"error": str(e), "results": []})
+
+@app.route('/')
+def webprint():
+    return render_template('chat.html') 
+
+
+
 
 if __name__ == "__main__":
   app.run( host="0.0.0.0", debug=True, threaded=True ,use_reloader=True, port=int(os.environ.get('flask_port',5000)) )
