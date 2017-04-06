@@ -90,14 +90,15 @@
         $('.send_message').click(function (e) {
 
             var text = getMessageText();
-            // setTimeout(function() {
-            //     sendMessage(processInput(text));
-            // }, 2000);
+            //setTimeout(function() {
+                 //return sendMessage(processInput(text));
+             //}, 2000);
             var data = $('.message_input').val();
             console.log("data", data);
             $.ajax({
                   type: 'POST',
                   contentType: 'application/json',
+                  //url: 'http://localhost:8000/matchquestion',
                   url: 'http://198.11.244.246:8000/matchquestion',
                   dataType : 'json',
                   data : JSON.stringify(data),

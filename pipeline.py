@@ -107,6 +107,7 @@ def textBlobExtractor(query, callback=None):
 
 
 def spacyExtractor(query,callback=None):
+    #parser = English()
     entities_list, location, organisation, person, date = [], [], [], [], []
     try:
         for text in query['texts']:
@@ -232,6 +233,7 @@ def pipelineFilterWrapperV2(request, stop, entity_extractor_functions_list=None)
     return jsonify({"results": results})
 
 def convertSynonyms(text):
+    #parser = English()
     answer = text['answer']
     converted_answer = answer
     nlp_obj = parser(answer)
