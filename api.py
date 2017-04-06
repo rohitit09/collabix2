@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request,render_template
-from nltk.corpus import stopwords
 from PyDictionary import PyDictionary
 import spelling
 import os
@@ -10,8 +9,7 @@ import re
 import difflib
 
 dictionary=PyDictionary()
-cachedStopWords = stopwords.words("english")
-cachedStopWords.remove('not')
+cachedStopWords = pipeline.cachedStopWords
 app = Flask(__name__)
 ques_mark_word=["how","when","what","where","why"]
 
@@ -57,7 +55,6 @@ def removeStopWordsques(text):
 def checkedEntities(text,ques_text1):
   question = text['question']
   count=[]
-  
   resulted_entity=[]
   func_list = ['spacyExtractor', 'nltkExtractor']
   headers = {'content-type': 'application/json'}
@@ -80,10 +77,13 @@ def checkedEntities(text,ques_text1):
     temp=" ".join(count)
     score=difflib.SequenceMatcher(None, temp.lower(), ques_text1.lower()).ratio()
     res={"usr_ques_extarcted_entity":entities['results'],"matched_entity":count,"count":len(count),"ques_key":ques['_key'],"entity_in_ques":ques['ques_entities'],"question":ques['question'],"score":score,"answer":ques['answer']}
-    print res
     resulted_entity.append(res)
   resulted_entity = sorted(resulted_entity , key=lambda k: k['count'] , reverse=True )
-  return {"status": True,"result":resulted_entity[0]}
+  if resulted_entity[0]['count']>0:
+    return {"status": True,"result":resulted_entity[0]}
+  else:
+    resulted_entity[0]['answer']="data not matched"
+    return {"status": False,"result":resulted_entity[0]}
 
 @app.route("/matchquestion",methods=["POST"])
 def matchQuestion():
