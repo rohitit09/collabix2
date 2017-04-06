@@ -61,7 +61,7 @@ def checkedEntities(text,ques_text1):
   resulted_entity=[]
   func_list = ['spacyExtractor', 'nltkExtractor']
   headers = {'content-type': 'application/json'}
-  url = 'http://localhost:5000/pipelineFilter'
+  url = 'http://localhost:8000/pipelineFilter'
   entities = json.loads(requests.request("POST", url, data=json.dumps({"texts": [question], "pipeline_list": func_list}), headers=headers).text)
   ques_text= ques_text1.split(" ")
   for i in ques_mark_word:
@@ -87,6 +87,7 @@ def checkedEntities(text,ques_text1):
 
 @app.route("/matchquestion",methods=["POST"])
 def matchQuestion():
+  #import ipdb; ipdb.set_trace()
   text = request.json
   print 'text', text
   text1={"question":text}
@@ -125,12 +126,13 @@ def pipelineFilter():
   except Exception as e:
     return jsonify({"error": str(e), "results": []})
 
-@app.route('/')
+@app.route('/chat')
 def webprint():
+    print "index";
     return render_template('chat.html') 
 
 
 
 
 if __name__ == "__main__":
-  app.run( host="0.0.0.0", debug=True, threaded=True ,use_reloader=True, port=int(os.environ.get('flask_port',5000)) )
+  app.run( host="0.0.0.0", debug=True, threaded=True ,use_reloader=True, port=int(os.environ.get('flask_port',8000)) )
