@@ -98,7 +98,7 @@
             $.ajax({
                   type: 'POST',
                   contentType: 'application/json',
-                  url: 'http://localhost:5000/matchquestion',
+                  url: 'http://198.11.244.246:8000/matchquestion',
                   dataType : 'json',
                   data : JSON.stringify(data),
                   success : function(result) {
@@ -107,7 +107,7 @@
                     return sendMessage(getMessageText());
                   },error : function(err){
                     alert("Something is wrong", err)
-                     console.log(result);
+                     console.log(err);
                   }
               });
 
